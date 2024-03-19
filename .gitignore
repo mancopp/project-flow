@@ -1,5 +1,32 @@
+### Docker ###
+
+.vagrant*
+bin
+docker/
+.*.swp
+a.out
+*.orig
+build_src
+.flymake*
+.idea
+.DS_Store
+docs/_build
+docs/_static
+docs/_templates
+.gopath/
+.dotcloud
+*.test
+bundles/
+.hg/
+.git/
+vendor/pkg/
+pyenv
+Vagrantfile
+
+### Symfony ###
 
 ###> symfony/framework-bundle ###
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -23,3 +50,4 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
