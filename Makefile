@@ -3,7 +3,7 @@ dev-build:
 	docker compose build
 
 # Start local dev environment.
-up:
+dev:
 	docker compose up -d
 
 # Stop local dev environment.
