@@ -12,4 +12,4 @@ dev-down:
 
 # Enter web container cli.
 ssh:
-	docker exec -it project-flow-web-1 bash
+	docker exec -it project-flow-web bash
