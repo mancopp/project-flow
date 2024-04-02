@@ -8,9 +8,9 @@ RUN docker-php-ext-install pdo pdo_mysql zip gd
 
 RUN a2enmod rewrite
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-COPY . /var/www
+COPY . /var/www/html
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
