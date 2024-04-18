@@ -30,7 +30,7 @@ class TaskController extends AbstractController
         // Handle form in a similar way as the 'new' action, but do not redirect or create another view.
 
         $tasks = $this->entityManager->getRepository(Task::class)->findAll();
-        return $this->render('task/index.html.twig', [
+        return $this->render('tasks/index.html.twig', [
             'tasks' => $tasks,
             'form' => $form->createView(),  // Pass the form to the template
         ]);
@@ -52,7 +52,7 @@ class TaskController extends AbstractController
         }
 
         // Return to a route that can show the form errors or log them
-        return $this->render('task/index.html.twig', [
+        return $this->render('tasks/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -74,14 +74,14 @@ class TaskController extends AbstractController
 
         // If the request is an AJAX request, return only the form HTML
         if ($request->isXmlHttpRequest()) {
-            return $this->render('task/_form.html.twig', [
+            return $this->render('tasks/_form.html.twig', [
                 'form' => $form->createView(),
                 'task' => $task,
             ]);
         }
 
         // If it's a regular request, render the entire page with the form
-        return $this->render('task/edit.html.twig', [
+        return $this->render('tasks/edit.html.twig', [
             'form' => $form->createView(),
             'task' => $task,
         ]);
