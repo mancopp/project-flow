@@ -1,0 +1,84 @@
+{# templates/task/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Task List{% endblock %}
+
+{% block body %}
+<h1>Task List</h1>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModalNew">Create new Task</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.status.name }}</td>
+            <td>
+                <button class="btn btn-info" onclick="loadTaskEditForm({{ task.id }})">Edit</button>
+                <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" onsubmit="return confirm('Are you sure?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal for Creating New Task -->
+<div class="modal fade" id="taskModalNew" tabindex="-1" aria-labelledby="taskModalNewLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskModalNewLabel">New Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form, {'attr': {'action': path('task_new')}}) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-success">Create Task</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Editing Task -->
+<div class="modal fade" id="taskModalEdit" tabindex="-1" aria-labelledby="taskModalEditLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskModalEditLabel">Edit Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editTaskForm">
+                    <!-- Edit Task Form will be loaded here -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadTaskEditForm(taskId) {
+    const url = `/tasks/${taskId}/edit`;
+    fetch(url).then(response => response.text()).then(html => {
+        $('#taskModalEdit .modal-body').html(html);
+        $('#taskModalEdit').modal('show');
+    });
+}
+</script>
+{% endblock %}
