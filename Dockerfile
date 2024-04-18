@@ -3,6 +3,9 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
   git zip unzip libpng-dev \
   libzip-dev default-mysql-client
+  
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
 
 RUN docker-php-ext-install pdo pdo_mysql zip gd
 
