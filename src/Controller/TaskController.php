@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\Status;
 use App\Form\TaskType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

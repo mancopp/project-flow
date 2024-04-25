@@ -13,3 +13,6 @@ dev-down:
 # Enter web container cli.
 ssh:
 	docker exec -it project-flow-web bash
+# Migrate
+migrate:
+	docker exec -it project-flow-web bin/console doctrine:migrations:migrate
