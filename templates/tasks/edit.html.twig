@@ -6,6 +6,6 @@
     <h1>Edit Task</h1>
     {{ form_start(form, {'attr': {'action': path('task_edit', {'id': task.id})}}) }}
     {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit">Save Changes</button>
     {{ form_end(form) }}
 {% endblock %}
