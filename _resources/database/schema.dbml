@@ -1,0 +1,60 @@
+Table users {
+  id int [pk, increment]
+  name varchar
+  surname varchar
+  username varchar [unique]
+  title varchar
+  email varchar
+  notifications_enabled boolean
+  password_hash varchar
+  created_at datetime
+}
+
+Table projects {
+  id int [pk, increment]
+  name varchar [unique]
+  task_prefix varchar
+}
+
+Table project_participants {
+  id int [pk, increment]
+  project_id int [ref: > projects.id]
+  user_id int [ref: > users.id]
+  role_id int [ref:> roles.id]
+  created_at datetime
+}
+
+Table roles {
+  id int [pk, increment]
+  title varchar
+}
+
+Table tasks {
+  id int [pk, increment]
+  project_id int [ref: > projects.id]
+  title varchar
+  ticket varchar [unique]
+  description text
+  status_id int [ref: > statuses.id]
+  created_at datetime
+}
+
+Table statuses {
+  id int [pk, increment]
+  name varchar
+}
+
+Table task_assignees {
+  id int [pk, increment]
+  task_id int [ref: > tasks.id]
+  user_id int [ref: > users.id]
+}
+
+Table task_comments {
+  id int [pk, increment]
+  task_id int [ref: > tasks.id]
+  user_id int [ref: > users.id]
+  comment_text text
+  is_internal boolean
+  created_at datetime
+}
