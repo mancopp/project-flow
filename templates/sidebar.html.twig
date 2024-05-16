@@ -1,0 +1,26 @@
+{% set nav_buttons = [
+    {'text': 'Home', 'url': '/'},
+    {'text': 'About', 'url': '/'},
+    {'text': 'Services', 'url': '/'},
+    {'text': 'Contact', 'url': '/'}
+] %}
+
+<aside class="sidebar w-96 h-screen p-7 bg-cyan-800 text-white">
+	<div class="flex gap-4 mb-8">
+		<img class="w-20 h-20 rounded-full border border-white" src="{{ asset('images/logo-pf.svg') }}" alt="ProjectFlow logo">
+		<div class="flex flex-col justify-center">
+			<h3 class="font-bold text-3xl">{{ title }}
+			</h3>
+			<p class="text-xl">{{ subtitle }}</p>
+		</div>
+	</div>
+	<nav>
+		<ul>
+			{% for button in nav_buttons %}
+				<li>
+					<a class="block bg-cyan-700 rounded-xl w-full mb-2 p-5 font-bold text-xl hover:bg-cyan-600" href="{{ button.url }}">{{ button.text }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</nav>
+</aside>
