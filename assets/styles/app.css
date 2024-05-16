@@ -9,3 +9,7 @@ body {
   color: #445e5e;
   font-family: "Roboto", sans-serif;
 }
+
+* {
+  box-sizing: border-box;
+}
