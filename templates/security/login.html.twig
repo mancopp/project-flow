@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project Flow – Login
-{% endblock %}
-
+{% block title %}Log in!{% endblock %}
 
 {% block body %}
-	<div class="bg-cyan-700 w-screen h-screen flex justify-center items-center">
+<div class="bg-cyan-700 w-screen h-screen flex justify-center items-center">
 		<div class="bg-pf-cyan-light p-10 w-[600px] rounded-2xl">
 
 			<h1 class="font-bold text-6xl text-center mb-12">Login</h1>
@@ -13,22 +11,46 @@
 			{% if error %}
 				<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
+<form method="post" class="flex flex-col justify-center items-stretch">
 
-			<form action="{{ path('app_login') }}" method="post" class="flex flex-col justify-center items-stretch">
-				<input class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6" type="email" name="_email" placeholder="Email" required>
-				<input class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3" type="password" name="_password" placeholder="Password" required>
+            <input 
+                type="email" 
+                value="{{ last_username }}" 
+                name="email" 
+                id="inputEmail" 
+                class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6" 
+                placeholder="Email"
+                autocomplete="email" 
+                required 
+                autofocus
+            >
 
-				<div class="text-lg mb-6">
-					<a class="text-blue-700" href="/">Forgout password?</a>
-				</div>
+            <input 
+                type="password" 
+                name="password" 
+                id="inputPassword" 
+                class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3" 
+                autocomplete="current-password" 
+                placeholder="Password"
+                required
+            >
 
-				<button class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3" type="submit">Login</button>
+            <input 
+                type="hidden" 
+                name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
 
-				<div class="text-lg">
+            <button 
+                class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3" 
+                type="submit">
+                Sign in
+            </button>
+            <div class="text-lg">
 					Don't have an account?
-					<a class="text-blue-700" href="/">Signup</a>
-				</div>
-			</form>
-		</div>
-	</div>
+					<a class="text-blue-700" href="/register">Signup</a>
+			</div>
+        </form>
+    </div>
+</div>
 {% endblock %}
