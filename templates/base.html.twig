@@ -1,28 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		{% block stylesheets %}
+			<link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+		{% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        <main>
-            {% block body %}{% endblock %}
-        </main>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                // Ensuring jQuery works
-                console.log('jQuery version:', $.fn.jquery);
-                // Example to show modal manually if needed
-                // $('#taskModalNew').modal('show');
-            });
-        </script>
-    </body>
-</html>
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+		{% endblock %}
+	</head>
+	<body>
+		<div class="flex">
+			{% include 'sidebar.html.twig' with {
+                'title': block('sidebar_title'),
+                'subtitle': block('sidebar_subtitle'),
+            }
+            %}
+
+			<main class="flex-grow"> {% block body %}{% endblock %}
+				</main>
+			</div>
+
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+			<script>
+				$(document).ready(function () { // Ensuring jQuery works
+console.log('jQuery version:', $.fn.jquery);
+});
+			</script>
+		</body>
+	</html>
