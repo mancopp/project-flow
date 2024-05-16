@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Status{% endblock %}
+
+{% block body %}
+    <h1>Edit Status</h1>
+    {{ form_start(form, {'attr': {'action': path('status_edit', {'id': status.id})}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Save Changes</button>
+    {{ form_end(form) }}
+{% endblock %}

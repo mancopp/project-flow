@@ -18,6 +18,9 @@ class Status
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isDefault = false;
+
     #[ORM\OneToMany(mappedBy: 'status', targetEntity: Task::class)]
     private Collection $tasks;
 
@@ -36,7 +39,6 @@ class Status
     public function setId(?int $id): self
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -50,7 +52,19 @@ class Status
     public function setName(?string $name): self
     {
         $this->name = $name;
+        return $this;
+    }
 
+    // Getter for isDefault
+    public function getIsDefault(): bool
+    {
+        return $this->isDefault;
+    }
+
+    // Setter for isDefault
+    public function setIsDefault(bool $isDefault): self
+    {
+        $this->isDefault = $isDefault;
         return $this;
     }
 
@@ -67,7 +81,6 @@ class Status
             $this->tasks[] = $task;
             $task->setStatus($this);
         }
-
         return $this;
     }
 
@@ -80,7 +93,6 @@ class Status
                 $task->setStatus(null);
             }
         }
-
         return $this;
     }
 }
