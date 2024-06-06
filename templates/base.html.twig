@@ -18,7 +18,7 @@
 	</head>
 	<body>
 		<div class="flex">
-			{% if include_sidebar|default(false) %}
+			{% if sidebar is defined %}
 				{% 
 					include 'sidebar.html.twig' with {
 						'title': block('sidebar_title'),

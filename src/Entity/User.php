@@ -22,6 +22,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
+    #[ORM\Column(length: 180)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 180)]
+    private ?string $title = null;
+
     #[ORM\OneToMany(targetEntity: ProjectParticipant::class, mappedBy: 'user')]
     private Collection $projects;
 
@@ -48,6 +54,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getProjects(): Collection
     {
         return $this->projects;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function getEmail(): ?string
