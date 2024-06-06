@@ -19,6 +19,10 @@ class Task
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
+
     #[ORM\ManyToOne(targetEntity: Status::class, inversedBy: "tasks")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
@@ -66,5 +70,10 @@ class Task
     {
         $this->status = $status;
         return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
     }
 }
