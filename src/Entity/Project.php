@@ -14,8 +14,17 @@ class Project
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: "string")]
+    private $title;
+
+    #[ORM\Column(type: "string")]
+    private $subtitle;
+
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, cascade: ['persist', 'remove'])]
     private Collection $tasks;
+
+    #[ORM\ManyToMany(targetEntity: ProjectParticipant::class, mappedBy: 'project')]
+    private Collection $participants;
 
     public function getId(): ?int
     {
@@ -28,5 +37,13 @@ class Project
     public function getTasks(): Collection
     {
         return $this->tasks;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
     }
 }

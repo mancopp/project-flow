@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{# FIXME: Convert sidebar data to object and handle it instead of setting block values #}
+{% set include_sidebar = true %}
+
+{% block title %}Dashboard
+{% endblock %}
+
+{% block sidebar_title %}
+	Username
+{% endblock %}
+
+{% block sidebar_subtitle %}
+	User title
+{% endblock %}
+
+{% block body %}
+	<h1>Account settings</h1>
+{% endblock %}
