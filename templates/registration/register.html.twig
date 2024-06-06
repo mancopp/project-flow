@@ -1,33 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register
+{% endblock %}
 
 {% block body %}
-	<div class="bg-cyan-700 w-screen h-screen flex justify-center items-center">
+	<div class="bg-cyan-700 w-full h-full flex justify-center items-center">
 		<div class="bg-pf-cyan-light p-10 w-[600px] rounded-2xl">
 			<h1 class="font-bold text-6xl text-center mb-12">Signup</h1>
 
-			{# {% if error %}
-                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %} #}
+			{{ form_start(registrationForm, {'attr': {'class': 'flex flex-col justify-center items-stretch'}}) }}
+			{{ form_row(registrationForm.email, {'attr': {'class': 'w-full rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6'}}) }}
+			{{ form_row(registrationForm.plainPassword, {'attr': {'class': 'w-full rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3'}}) }}
 
-            {{ form_start(registrationForm, {'attr': {'class': 'flex flex-col justify-center items-stretch'}}) }}
-                {{ form_row(registrationForm.email, {'attr': {'class': 'rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6'}}) }}
-                {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3'}}) }}
-            
-            {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3'}}) }}
-            
-            <button 
-                type="submit" 
-                class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3">
-                Signup
-            </button>
-            <div class="text-lg">
-					Already have an account?
-					<a class="text-blue-700" href="/login">Login</a>
-				</div>
-            
-            {{ form_end(registrationForm) }}
-        </div>
-    </div>
+			{{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3'}}) }}
+
+			<button type="submit" class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3">
+				Signup
+			</button>
+			<div class="text-lg">
+				Already have an account?
+				<a class="text-blue-700" href="/login">Login</a>
+			</div>
+
+			{{ form_end(registrationForm) }}
+		</div>
+	</div>
 {% endblock %}
