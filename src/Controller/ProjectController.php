@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\Task;
 use App\Helper\SidebarHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,9 +39,12 @@ class ProjectController extends AbstractController
     public function project_list(Project $project): Response
     {
         $sidebar = $this->generateControllerSidebar($project);
+        $entityManager = $this->doctrine->getManager();
+        $tasks = $entityManager->getRepository(Task::class)->findTasksByProject($project);
 
-        return $this->render('project/board.html.twig', [
+        return $this->render('project/list.html.twig', [
             'sidebar' => $sidebar,
+            'tasks' => $tasks
         ]);
     }
 
