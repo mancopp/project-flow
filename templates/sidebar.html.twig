@@ -12,7 +12,10 @@
 			{% set current_route = app.request.attributes.get('_route') %}
 			{% for button in sidebar.nav_buttons %}
 				<li>
-					<a class="block rounded-xl w-full mb-2 p-5 font-bold text-xl {{current_route == button.route ? sidebar.styles.selected : sidebar.styles.default }}" href="{{ url(button.route, button.params is defined ? button.params : {}) }}">{{ button.text }}</a>
+					<a class="flex gap-4 items-center rounded-xl w-full mb-2 p-5 font-bold text-xl {{current_route == button.route ? sidebar.styles.selected : sidebar.styles.default }}" href="{{ url(button.route, button.params is defined ? button.params : {}) }}">
+						{{ ux_icon('fa-solid:bars', {class: 'w-6 h-6'}) }}
+						<span>{{ button.text }}</span>
+					</a>
 				</li>
 			{% endfor %}
 		</ul>
