@@ -31,6 +31,16 @@ class Project
         return $this->id;
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getSubtitle(): string
+    {
+        return $this->subtitle;
+    }
+
     /**
      * @return Collection<int, Task>
      */

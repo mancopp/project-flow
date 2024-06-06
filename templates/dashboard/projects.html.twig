@@ -1,26 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{# FIXME: Convert sidebar data to object and handle it instead of setting block values #}
-{% set include_sidebar = true %}
-
-{% block title %}Dashboard
-{% endblock %}
-
-{% block sidebar_title %}
-	Username
-{% endblock %}
-
-{% block sidebar_subtitle %}
-	User title
+{% block title %}Projects
 {% endblock %}
 
 {% block body %}
-	<h1>Projects</h1>
-	<ul>
-		{% for project in projects %}
-			<li>
-				<a href="/">{{ project.title }}</a>
-			</li>
-		{% endfor %}
-	</ul>
+	<div class="px-2 py-4 lg:px-6 lg:py-8">
+		<h1 class="text-4xl font-bold mb-8">Projects</h1>
+		<ul class="w-full flex-col">
+			{% for project in projects %}
+				<li>
+					<a class="block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-red-500 hover:bg-red-800" href="{{ url('app_project', {id: project.id})}}">{{ project.title }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
 {% endblock %}

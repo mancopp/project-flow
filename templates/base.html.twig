@@ -20,10 +20,7 @@
 		<div class="flex">
 			{% if sidebar is defined %}
 				{% 
-					include 'sidebar.html.twig' with {
-						'title': block('sidebar_title'),
-						'subtitle': block('sidebar_subtitle'),
-					}
+					include 'sidebar.html.twig'
 				%}
 			{% endif %}
 
