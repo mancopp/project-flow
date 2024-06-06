@@ -54,7 +54,7 @@ class DashboardController extends AbstractController
       $user = $this->security->getUser();
       $nav_buttons = [
         ['text' => 'Project list', 'route' => 'dashboard_projects'], 
-        ['text' => 'Account settings', 'route' => 'dashboard_account_settings']
+        ['text' => 'Account settings', 'route' => 'dashboard_account_settings', 'icon' => 'ic:round-settings']
       ];
 
       return $this->sidebarHelper->generateSidebar($user->getUsername(), $user->getTitle(), $nav_buttons);

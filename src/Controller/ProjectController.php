@@ -70,11 +70,11 @@ class ProjectController extends AbstractController
 
     private function generateControllerSidebar(Project $project) : array {
       $nav_buttons = [
-        ['text' => 'Board', 'route' => 'project_board', 'params' => ['id' => $project->getId()]], 
+        ['text' => 'Board', 'route' => 'project_board', 'params' => ['id' => $project->getId()], 'icon' => 'mi:board'], 
         ['text' => 'List', 'route' => 'project_list', 'params' => ['id' => $project->getId()]],
-        ['text' => 'Project Settings', 'route' => 'project_settings', 'params' => ['id' => $project->getId()]],
-        ['text' => 'Participants', 'route' => 'project_participants', 'params' => ['id' => $project->getId()]],
-        ['text' => 'Back to dashboard', 'route' => 'app_dashboard'],
+        ['text' => 'Project Settings', 'route' => 'project_settings', 'params' => ['id' => $project->getId()], 'icon' => 'ic:round-settings'],
+        ['text' => 'Participants', 'route' => 'project_participants', 'params' => ['id' => $project->getId()], 'icon' => 'mdi:users'],
+        ['text' => 'Back to dashboard', 'route' => 'app_dashboard', 'icon' => 'ion:arrow-back-outline'],
       ];
 
       return $this->sidebarHelper->generateSidebar($project->getTitle(), $project->getSubtitle(), $nav_buttons);
