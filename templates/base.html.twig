@@ -18,9 +18,11 @@
 	</head>
 	<body>
 		<div class="flex">
-			{% include 'sidebar.html.twig' with {
-            }
-            %}
+			{% if sidebar is defined %}
+				{% 
+					include 'sidebar.html.twig'
+				%}
+			{% endif %}
 
 			<main class="flex-grow"> {% block body %}{% endblock %}
 				</main>

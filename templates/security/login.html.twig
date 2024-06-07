@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Log in!
+{% endblock %}
 
 {% block body %}
-<div class="bg-cyan-700 w-screen h-screen flex justify-center items-center">
+	<div class="bg-cyan-700 w-screen h-screen flex justify-center items-center">
 		<div class="bg-pf-cyan-light p-10 w-[600px] rounded-2xl">
 
 			<h1 class="font-bold text-6xl text-center mb-12">Login</h1>
@@ -11,46 +12,22 @@
 			{% if error %}
 				<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
-<form method="post" class="flex flex-col justify-center items-stretch">
+			<form method="post" class="flex flex-col justify-center items-stretch">
 
-            <input 
-                type="email" 
-                value="{{ last_username }}" 
-                name="email" 
-                id="inputEmail" 
-                class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6" 
-                placeholder="Email"
-                autocomplete="email" 
-                required 
-                autofocus
-            >
+				<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-6" placeholder="Email" autocomplete="email" required autofocus>
 
-            <input 
-                type="password" 
-                name="password" 
-                id="inputPassword" 
-                class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3" 
-                autocomplete="current-password" 
-                placeholder="Password"
-                required
-            >
+				<input type="password" name="password" id="inputPassword" class="rounded-lg border-[3px] border-cyan-700 p-6 text-xl mb-3" autocomplete="current-password" placeholder="Password" required>
 
-            <input 
-                type="hidden" 
-                name="_csrf_token"
-                value="{{ csrf_token('authenticate') }}"
-            >
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <button 
-                class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3" 
-                type="submit">
-                Sign in
-            </button>
-            <div class="text-lg">
+				<button class="rounded-lg bg-cyan-700 p-6 text-xl font-bold text-white mb-3" type="submit">
+					Sign in
+				</button>
+				<div class="text-lg">
 					Don't have an account?
 					<a class="text-blue-700" href="/register">Signup</a>
-			</div>
-        </form>
-    </div>
-</div>
+				</div>
+			</form>
+		</div>
+	</div>
 {% endblock %}

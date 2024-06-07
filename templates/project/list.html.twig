@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project Task List
+{% endblock %}
+
+{% block body %}
+	<div class="px-2 py-4 lg:px-6 lg:py-8">
+		<h1 class="text-4xl font-bold mb-8">Task List</h1>
+		<ul class="w-full flex-col">
+			{% for task in tasks %}
+				<li>
+					<a class="block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-cyan-700 hover:bg-cyan-800" href="/">{{ task.name }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
