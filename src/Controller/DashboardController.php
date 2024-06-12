@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\ProjectParticipant;
 use App\Entity\User;
 use App\Form\AccountSettingsFormType;
+use App\Form\ProjectFormType;
 use App\Helper\SidebarHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,6 +45,42 @@ class DashboardController extends AbstractController
             'sidebar' => $sidebar,
         ]);
     }
+
+    #[Route('/dashboard/projects/create', name: 'dashboard_projects_create')]
+    public function createProject(Request $request): Response
+    {
+        $sidebar = $this->generateControllerSidebar();
+        
+        // Create the project creation form
+        $project = new Project();
+        $form = $this->createForm(ProjectFormType::class, $project);
+
+        // Handle form submission if any
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle saving the project data to the database
+            $entityManager = $this->doctrine->getManager();
+
+            // Assign current user as admin
+            $currentUser = $this->getUser();
+            $projectParticipant = new ProjectParticipant($project, $currentUser, 'admin');
+            $entityManager->persist($projectParticipant);
+
+            // Persist the project
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            // Redirect to dashboard or wherever you want
+            return $this->redirectToRoute('dashboard_projects');
+        }
+
+        // Render the project creation form
+        return $this->render('dashboard/create_project.html.twig', [
+            'form' => $form->createView(),
+            'sidebar' => $sidebar,
+        ]);
+    }
+
 
     #[Route('/dashboard/account-settings', name: 'dashboard_account_settings')]
     public function accountSettings(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response

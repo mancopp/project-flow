@@ -36,9 +36,21 @@ class Project
         return $this->title;
     }
 
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
     public function getSubtitle(): string
     {
         return $this->subtitle;
+    }
+
+    public function setSubtitle(string $subtitle): static
+    {
+        $this->subtitle = $subtitle;
+        return $this;
     }
 
     /**
