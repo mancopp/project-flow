@@ -18,13 +18,28 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $fieldStyles = 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none';
         $builder
             ->add('email', TextType::class, [
                 'label' => false,
                 'attr' => [
                     'autocomplete' => 'email',                     
-                    'class' => 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none',
+                    'class' => $fieldStyles,
                     'placeholder' => 'Email'
+                ],
+            ])
+            ->add('username', TextType::class, [
+                'label' => false,
+                'attr' => [               
+                    'class' => $fieldStyles,
+                    'placeholder' => 'Username'
+                ],
+            ])
+            ->add('title', TextType::class, [
+                'label' => false,
+                'attr' => [               
+                    'class' => $fieldStyles,
+                    'placeholder' => 'Title'
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
@@ -42,7 +57,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',                     
-                    'class' => 'bg-transparent block mt-10 mx-auto border-b-2 w-1/5 h-20 text-2xl outline-none',
+                    'class' => $fieldStyles,
                     'placeholder' => 'Password'
                 ],
                 'constraints' => [
