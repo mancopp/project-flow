@@ -21,8 +21,7 @@
 			{% if sidebar is defined %}
 				{% include 'sidebar.html.twig' %}
 			{% endif %}
-			<main class="ml-96 p-7 flex-grow"> {% block body %}{% endblock %}
-				</main>
+			<main class="flex-grow"> {% block body %}{% endblock %}</main>
 			</div>
 			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 			<script>
