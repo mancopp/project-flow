@@ -1,10 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project Board
-{% endblock %}
+{% block title %}Project Task Board{% endblock %}
 
 {% block body %}
-	<div>
-		Project view board
-	</div>
+    <div class="px-2 py-4 lg:px-6 lg:py-8">
+        <h1 class="text-4xl font-bold mb-8">Project Board</h1>
+        <div class="flex space-x-4">
+            {% for status in statuses %}
+                <div class="w-full rounded-lg p-4 min-h-[400px]">
+                    <h2 class="text-2xl font-bold mb-4">{{ status.name }}</h2>
+                    <div class="task-list border-2 border-dashed rounded-lg p-3" data-status-id="{{ status.id }}" style="min-height: 200px;">
+                        {% for task in tasksByStatus[status.name] %}
+                            <div class="task-item block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-cyan-700 hover:bg-cyan-800" data-task-id="{{ task.id }}">
+                                <a href="{{ path('task_view', {id: task.id}) }}">{{ task.name }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .task-list.dragover {
+            background-color: #f0f0f0;
+        }
+
+        .task-item {
+            cursor: move;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskItems = document.querySelectorAll('.task-item');
+            const taskLists = document.querySelectorAll('.task-list');
+
+            taskItems.forEach(item => {
+                item.draggable = true;
+
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', item.dataset.taskId);
+                });
+            });
+
+            taskLists.forEach(list => {
+                list.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    list.classList.add('dragover');
+                });
+
+                list.addEventListener('dragleave', () => {
+                    list.classList.remove('dragover');
+                });
+
+                list.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    list.classList.remove('dragover');
+
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const taskItem = document.querySelector(`.task-item[data-task-id='${taskId}']`);
+                    const statusId = list.dataset.statusId;
+
+                    list.appendChild(taskItem);
+
+                    fetch('{{ path('update_task_status', {id: project.id}) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: JSON.stringify({ taskId: taskId, statusId: statusId }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(data => { throw new Error(data.message); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Task status updated:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}

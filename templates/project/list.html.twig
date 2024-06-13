@@ -5,26 +5,26 @@
 {% block body %}
     <div class="px-2 py-4 lg:px-6 lg:py-8">
         <h1 class="text-4xl font-bold mb-8">Task List</h1>
-        <div class="flex lg:flex-row lg:justify-between lg:items-center lg:gap-4 mb-3">
-			<form method="get" action="{{ path('project_list', {id: app.request.get('id')}) }}">
-				<input type="text" name="search" value="{{ search }}" placeholder="Search by name" class="p-3 rounded-lg border-2 border-cyan-700">
-				<select name="status" class="p-3 rounded-lg">
-					<option value="">Search by status</option>
-					{% for status in statuses %}
-						<option value="{{ status.id }}" {% if statusId == status.id %}selected{% endif %}>{{ status.name }}</option>
-					{% endfor %}
-				</select>
-				<button type="submit" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white">Search</button>
-			</form>
-			<div>
-				<a href="{{ path('project_list', {id: app.request.get('id'), sort: 'name', direction: direction == 'asc' ? 'desc' : 'asc', search: search, status: statusId}) }}" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white mx-8">
-					Sort by Name {{ direction == 'asc' ? '▼' : '▲' }}
-				</a>
-				<a href="{{ path('project_list', {id: app.request.get('id'), sort: 'status', direction: direction == 'asc' ? 'desc' : 'asc', search: search, status: statusId}) }}" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white mx-8">
-					Sort by Status {{ direction == 'asc' ? '▼' : '▲' }}
-				</a>
-			</div>
-		</div>
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-4 mb-3">
+            <form id="task-filter-form" method="get" action="{{ path('project_list', {id: app.request.get('id')}) }}">
+                <input type="text" name="search" value="{{ search }}" placeholder="Search by name" class="p-3 rounded-lg border-2 border-cyan-700">
+				<select name="status" class="p-3 rounded-lg" id="status-filter">
+                    <option value="">Pick a status</option>
+                    {% for status in statuses %}
+                        <option value="{{ status.id }}" {% if statusId == status.id %}selected{% endif %}>{{ status.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white">Search</button>
+            </form>
+            <div class="flex flex-row items-center gap-2">
+                <a href="{{ path('project_list', {id: app.request.get('id'), sort: 'name', direction: direction == 'asc' ? 'desc' : 'asc', search: search, status: statusId}) }}" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white mx-8">
+                    Sort by Name {{ direction == 'asc' ? '▼' : '▲' }}
+                </a>
+                <a href="{{ path('project_list', {id: app.request.get('id'), sort: 'status', direction: direction == 'asc' ? 'desc' : 'asc', search: search, status: statusId}) }}" class="p-3 rounded-lg bg-red-500 hover:bg-red-800 text-white mx-8">
+                    Sort by Status {{ direction == 'asc' ? '▼' : '▲' }}
+                </a>
+            </div>
+        </div>
         <ul class="w-full flex-col">
             {% for task in tasks %}
                 <li>
@@ -33,4 +33,15 @@
             {% endfor %}
         </ul>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusFilter = document.getElementById('status-filter');
+            const taskFilterForm = document.getElementById('task-filter-form');
+
+            statusFilter.addEventListener('change', () => {
+                taskFilterForm.submit();
+            });
+        });
+    </script>
 {% endblock %}

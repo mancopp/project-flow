@@ -136,6 +136,7 @@ class TaskController extends AbstractController
     private function generateControllerSidebar(Project $project) : array {
       $nav_buttons = [
         ['text' => 'Back to list', 'route' => 'project_list', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
+        ['text' => 'Back to board', 'route' => 'project_board', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
       ];
 
       return $this->sidebarHelper->generateSidebar($project->getTitle(), $project->getSubtitle(), $nav_buttons);
