@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\ProjectParticipant;
 use App\Entity\Task;
 use App\Helper\SidebarHelper;
+use App\Form\TaskFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -48,6 +51,31 @@ class ProjectController extends AbstractController
         ]);
     }
 
+    #[Route('/project/{id}/add-task', name: 'project_add_task')]
+    public function project_add_task(Request $request, Project $project): Response
+    {
+        $sidebar = $this->generateControllerSidebar($project);
+        $entityManager = $this->doctrine->getManager();
+
+        $task = new Task();
+        $task->setProject($project);
+
+        $form = $this->createForm(TaskFormType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('project_list', ['id' => $project->getId()]);
+        }
+
+        return $this->render('project/add_task.html.twig', [
+            'sidebar' => $sidebar,
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/project/{id}/settings', name: 'project_settings')]
     public function project_settings(Project $project): Response
     {
@@ -63,8 +91,22 @@ class ProjectController extends AbstractController
     {
         $sidebar = $this->generateControllerSidebar($project);
 
-        return $this->render('project/board.html.twig', [
+        // Fetch project participants and their roles
+        $participants = $this->doctrine->getRepository(ProjectParticipant::class)->findBy(['project' => $project]);
+
+        $users = [];
+        foreach ($participants as $participant) {
+            $users[] = [
+                'username' => $participant->getUser()->getUsername(),
+                'email' => $participant->getUser()->getEmail(),
+                'role' => $participant->getRole()->getName()
+            ];
+        }
+
+
+        return $this->render('project/participants.html.twig', [
             'sidebar' => $sidebar,
+            'users' => $users
         ]);
     }
 
@@ -72,6 +114,7 @@ class ProjectController extends AbstractController
       $nav_buttons = [
         ['text' => 'Board', 'route' => 'project_board', 'params' => ['id' => $project->getId()], 'icon' => 'mi:board'], 
         ['text' => 'List', 'route' => 'project_list', 'params' => ['id' => $project->getId()]],
+        ['text' => 'Add Task', 'route' => 'project_add_task', 'params' => ['id' => $project->getId()], 'icon' => 'material-symbols:add-ad'],
         ['text' => 'Project Settings', 'route' => 'project_settings', 'params' => ['id' => $project->getId()], 'icon' => 'ic:round-settings'],
         ['text' => 'Participants', 'route' => 'project_participants', 'params' => ['id' => $project->getId()], 'icon' => 'mdi:users'],
         ['text' => 'Back to dashboard', 'route' => 'app_dashboard', 'icon' => 'ion:arrow-back-outline'],

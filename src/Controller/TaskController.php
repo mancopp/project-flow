@@ -3,21 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\Project;
+use App\Entity\Status;
 use App\Form\TaskType;
+use App\Helper\SidebarHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+// FIXME: refactor controller, move routes to project
 class TaskController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private SidebarHelper $sidebarHelper,
+    ){}
 
     #[Route('/tasks', name: 'task_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -35,11 +38,35 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}', name: 'task_view', methods: ['GET'])]
-    public function view(Request $request, Task $task): Response
+    public function view(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
+        $sidebar = $this->generateControllerSidebar($task->getProject());
+        $statuses = $entityManager->getRepository(Status::class)->findAll();
+
         return $this->render('tasks/view.html.twig', [
             'task' => $task,
+            'statuses' => $statuses,
+            'sidebar' => $sidebar,
         ]);
+    }
+
+    #[Route('/task/{id}/update-status', name: 'task_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Task $task, EntityManagerInterface $entityManager): Response
+    {
+        $statusId = $request->request->get('status');
+        $status = $entityManager->getRepository(Status::class)->find($statusId);
+
+        if ($status) {
+            $task->setStatus($status);
+            $entityManager->persist($task);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Status updated successfully');
+        } else {
+            $this->addFlash('error', 'Invalid status');
+        }
+
+        return $this->redirectToRoute('task_view', ['id' => $task->getId()]);
     }
 
     #[Route('/tasks/new', name: 'task_new', methods: ['GET', 'POST'])]
@@ -104,5 +131,13 @@ class TaskController extends AbstractController
         }
 
         return $this->redirectToRoute('task_index');
+    }
+
+    private function generateControllerSidebar(Project $project) : array {
+      $nav_buttons = [
+        ['text' => 'Back to list', 'route' => 'project_list', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
+      ];
+
+      return $this->sidebarHelper->generateSidebar($project->getTitle(), $project->getSubtitle(), $nav_buttons);
     }
 }

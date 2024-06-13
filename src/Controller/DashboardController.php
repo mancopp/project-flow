@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Entity\ProjectParticipant;
 use App\Entity\User;
+use App\Entity\Role;
 use App\Form\AccountSettingsFormType;
 use App\Form\ProjectFormType;
 use App\Helper\SidebarHelper;
@@ -63,7 +64,17 @@ class DashboardController extends AbstractController
 
             // Assign current user as admin
             $currentUser = $this->getUser();
-            $projectParticipant = new ProjectParticipant($project, $currentUser, 'admin');
+
+            // Fetch the 'admin' role from database
+            $roleRepository = $entityManager->getRepository(Role::class);
+            $adminRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
+
+            if (!$adminRole) {
+                throw $this->createNotFoundException('Admin role not found in the database.');
+            }
+
+            // Create ProjectParticipant with the fetched role entity
+            $projectParticipant = new ProjectParticipant($project, $currentUser, $adminRole);
             $entityManager->persist($projectParticipant);
 
             // Persist the project
