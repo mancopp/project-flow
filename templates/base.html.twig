@@ -9,7 +9,7 @@
 		{% block stylesheets %}
 			<link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 		{% endblock %}
-
+		
 		{% block javascripts %}
 			{% block importmap %}
 				{{ importmap('app') }}
@@ -19,18 +19,14 @@
 	<body>
 		<div class="flex">
 			{% if sidebar is defined %}
-				{% 
-					include 'sidebar.html.twig'
-				%}
+				{% include 'sidebar.html.twig' %}
 			{% endif %}
-
-			<main class="flex-grow"> {% block body %}{% endblock %}
+			<main class="ml-96 p-7 flex-grow"> {% block body %}{% endblock %}
 				</main>
 			</div>
-
 			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 			<script>
-				$(document).ready(function () { // Ensuring jQuery works
+				$(document).ready(function () {
 console.log('jQuery version:', $.fn.jquery);
 });
 			</script>
