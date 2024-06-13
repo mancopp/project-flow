@@ -13,3 +13,6 @@ Access to Symfony cli inside the container:
 
 1. `make ssh`
 2. `php bin/console <...>`
+
+To apply fixtures:
+`php bin/console doctrine:fixtures:load`
