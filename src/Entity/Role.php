@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: RoleRepository::class)]
 class Role
 {
     #[ORM\Id]
