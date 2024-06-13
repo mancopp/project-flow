@@ -19,7 +19,7 @@ class ProjectParticipant
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "projects")]
     private $user;
 
-    #[ORM\Column(type: "string")]
+    #[ORM\ManyToOne(targetEntity: Role::class)]
     private $role;
 
     public function getId(): ?int
@@ -27,10 +27,44 @@ class ProjectParticipant
         return $this->id;
     }
 
-    public function __construct(Project $project, User $user, string $role)
+    public function __construct(Project $project, User $user, Role $role)
     {
         $this->project = $project;
         $this->user = $user;
         $this->role = $role;
+    }
+
+    // Getters and setters
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+        return $this;
     }
 }

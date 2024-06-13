@@ -1,5 +1,5 @@
-{# FIXME: Conditional tailwind styles do not work #}
-<aside class="sidebar w-96 h-screen p-7 bg-gray-700 text-white {{ sidebar.styles.container }}">
+<div class="w-96 h-screen p-7 {{ sidebar.styles.container }}"></div>
+<aside class="sidebar fixed top-0 w-96 h-screen p-7 bg-gray-700 text-white {{ sidebar.styles.container }}">
 	<div class="flex gap-4 mb-8">
 		<img class="w-20 h-20 rounded-full border border-white" src="{{ asset('images/logo-pf.svg') }}" alt="ProjectFlow logo">
 		<div class="flex flex-col justify-center">
@@ -12,8 +12,8 @@
 			{% set current_route = app.request.attributes.get('_route') %}
 			{% for button in sidebar.nav_buttons %}
 				<li>
-					<a class="flex gap-4 items-center rounded-xl w-full mb-2 p-5 font-bold text-xl {{current_route == button.route ? sidebar.styles.selected : sidebar.styles.default }}" href="{{ url(button.route, button.params is defined ? button.params : {}) }}">
-						{{ ux_icon(button.icon is defined ? button.icon : 'fa-solid:bars', {class: 'w-8 h-8'}) }}
+					<a class="flex gap-4 items-center rounded-xl w-full mb-2 p-5 font-bold text-xl {{ current_route == button.route ? sidebar.styles.selected : sidebar.styles.default }}" href="{{ url(button.route, button.params is defined ? button.params : {}) }}">
+						{{ ux_icon(button.icon is defined ? button.icon : 'fa-solid:bars', { class: 'w-8 h-8' }) }}
 						<span>{{ button.text }}</span>
 					</a>
 				</li>

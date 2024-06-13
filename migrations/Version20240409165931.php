@@ -21,8 +21,6 @@ final class Version20240409165931 extends AbstractMigration
     {
         // Create 'status' table with 'is_default' column included
         $this->addSql('CREATE TABLE status (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, is_default BOOLEAN NOT NULL DEFAULT FALSE, PRIMARY KEY(id))');
-        // Insert default statuses and mark them as immutable
-        $this->addSql("INSERT INTO status (name, is_default) VALUES ('To Do', TRUE), ('In Progress', TRUE), ('Review', TRUE), ('Done', TRUE)");
 
         // Create 'task' table
         $this->addSql('CREATE TABLE task (id INT AUTO_INCREMENT NOT NULL, status_id INT NOT NULL, name VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id))');

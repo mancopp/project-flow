@@ -9,7 +9,7 @@
 		<ul class="w-full flex-col">
 			{% for task in tasks %}
 				<li>
-					<a class="block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-cyan-700 hover:bg-cyan-800" href="/">{{ task.name }}</a>
+					<a class="block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-cyan-700 hover:bg-cyan-800" href="{{ url('task_view', {id: task.id}) }}">{{ task.name }}</a>
 				</li>
 			{% endfor %}
 		</ul>

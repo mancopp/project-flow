@@ -76,4 +76,10 @@ class Task
     {
         return $this->project;
     }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+        return $this;
+    }
 }

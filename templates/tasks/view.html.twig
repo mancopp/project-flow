@@ -14,6 +14,18 @@
 				<h2 class="text-4xl font-bold mb-6 lg:mb-0">{{ task.name }}</h2>
 			</div>
 			<div class="mb-6 lg:mb-8">
+				<p class="text-xl mb-2">Status</p>
+				<form method="post" action="{{ path('task_update_status', {'id': task.id}) }}">
+					<select name="status" class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg p-3 mt-2">
+						{% for status in statuses %}
+							<option value="{{ status.id }}" {% if status.id == task.status.id %} selected {% endif %}>{{ status.name }}</option>
+						{% endfor %}
+					</select>
+					<button type="submit" class="bg-pf-sky-blue rounded-lg p-3 mt-2">Update Status</button>
+
+				</form>
+			</div>
+			<div class="mb-6 lg:mb-8">
 				<p class="text-xl mb-2">Description</p>
 				<div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg min-h-48 px-6 py-4">
 					<span>{{ task.description }}</span>
@@ -31,6 +43,5 @@
 				</div>
 			</div>
 		</div>
-		<aside class="task-sidebar hidden lg:block w-80 h-screen bg-pf-sky-blue"></aside>
 	</div>
 {% endblock %}
