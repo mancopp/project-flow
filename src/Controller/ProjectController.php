@@ -13,6 +13,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\TaskRepository;
+use App\Repository\StatusRepository;
 
 class ProjectController extends AbstractController
 {
@@ -39,15 +41,25 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/list', name: 'project_list')]
-    public function project_list(Project $project): Response
+    public function project_list(Project $project, Request $request, TaskRepository $taskRepository, StatusRepository $statusRepository): Response
     {
         $sidebar = $this->generateControllerSidebar($project);
-        $entityManager = $this->doctrine->getManager();
-        $tasks = $entityManager->getRepository(Task::class)->findTasksByProject($project);
+        $sort = $request->query->get('sort', 'name');
+        $direction = $request->query->get('direction', 'asc');
+        $search = $request->query->get('search', '');
+        $statusId = $request->query->get('status', '');
+
+        $tasks = $taskRepository->findByProjectAndCriteria($project, $sort, $direction, $search, $statusId);
+        $statuses = $statusRepository->findAll();
 
         return $this->render('project/list.html.twig', [
             'sidebar' => $sidebar,
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'sort' => $sort,
+            'direction' => $direction,
+            'search' => $search,
+            'statuses' => $statuses,
+            'statusId' => $statusId,
         ]);
     }
 
