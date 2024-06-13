@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\ProjectParticipant;
 use App\Entity\Task;
 use App\Helper\SidebarHelper;
 use App\Form\TaskFormType;
@@ -90,8 +91,22 @@ class ProjectController extends AbstractController
     {
         $sidebar = $this->generateControllerSidebar($project);
 
-        return $this->render('project/board.html.twig', [
+        // Fetch project participants and their roles
+        $participants = $this->doctrine->getRepository(ProjectParticipant::class)->findBy(['project' => $project]);
+
+        $users = [];
+        foreach ($participants as $participant) {
+            $users[] = [
+                'username' => $participant->getUser()->getUsername(),
+                'email' => $participant->getUser()->getEmail(),
+                'role' => $participant->getRole()->getName()
+            ];
+        }
+
+
+        return $this->render('project/participants.html.twig', [
             'sidebar' => $sidebar,
+            'users' => $users
         ]);
     }
 
