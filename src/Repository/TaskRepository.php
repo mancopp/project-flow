@@ -22,16 +22,28 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    public function findTasksByProject(Project $project): array
+    public function findByProjectAndCriteria(Project $project, $sort, $direction, $search, $statusId)
     {
-        $entityManager = $this->getEntityManager();
+        $qb = $this->createQueryBuilder('t')
+                   ->andWhere('t.project = :project')
+                   ->setParameter('project', $project);
 
-        $query = $entityManager->createQuery(
-            'SELECT t
-            FROM App\Entity\Task t
-            WHERE t.project = :project'
-        )->setParameter('project', $project);
+        if ($search) {
+            $qb->andWhere('t.name LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
 
-        return $query->getResult();
+        if ($statusId) {
+            $qb->andWhere('t.status = :status')
+               ->setParameter('status', $statusId);
+        }
+
+        if ($sort && in_array($sort, ['name', 'status'])) {
+            $qb->orderBy('t.' . $sort, $direction === 'desc' ? 'DESC' : 'ASC');
+        } else {
+            $qb->orderBy('t.name', 'ASC');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
