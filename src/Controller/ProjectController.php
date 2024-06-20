@@ -7,6 +7,7 @@ use App\Entity\ProjectParticipant;
 use App\Entity\Task;
 use App\Helper\SidebarHelper;
 use App\Form\TaskFormType;
+use App\Form\ProjectFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -127,12 +128,23 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/project/{id}/settings', name: 'project_settings')]
-    public function project_settings(Project $project): Response
+    public function project_settings(Project $project, Request $request): Response
     {
+        $form = $this->createForm(ProjectFormType::class, $project);
+
+        // Handle form submission
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->doctrine->getManager()->flush();
+            $this->addFlash('success', 'Project settings updated successfully.');
+            return $this->redirectToRoute('project_settings', ['id' => $project->getId()]);
+        }
+
         $sidebar = $this->generateControllerSidebar($project);
 
-        return $this->render('project/board.html.twig', [
+        return $this->render('project/settings.html.twig', [
             'sidebar' => $sidebar,
+            'form' => $form->createView(),
         ]);
     }
 

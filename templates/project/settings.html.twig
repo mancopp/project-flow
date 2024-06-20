@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project Settings
+{% endblock %}
+
+{% block body %}
+	<div class="px-2 py-4 lg:px-6 lg:py-8">
+		<h1 class="text-4xl font-bold mb-8">Account settings</h1>
+		{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+		<div class="mb-6">
+			{{ form_label(form.title, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+			{{ form_widget(form.title, {'attr': {'class': 'mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}}) }}
+			{{ form_errors(form.title) }}
+		</div>
+
+		<div class="mb-6">
+			{{ form_label(form.subtitle, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+			{{ form_widget(form.subtitle, {'attr': {'class': 'mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}}) }}
+			{{ form_errors(form.subtitle) }}
+		</div>
+
+		<button class="bg-pf-cyan text-white text-bold rounded-lg p-3 mt-2 hover:bg-pf-sky-blue-dark transition duration-300">Save changes</button>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Entity\Project;
 use App\Entity\Status;
+use App\Entity\Comment;
 use App\Form\TaskType;
+use App\Form\CommentType;
 use App\Helper\SidebarHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,9 +39,24 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}', name: 'task_view', methods: ['GET'])]
+    #[Route('/tasks/{id}', name: 'task_view', methods: ['GET', 'POST'])]
     public function view(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setTask($task);
+            $comment->setAuthor($this->getUser());
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Comment added successfully');
+
+            return $this->redirectToRoute('task_view', ['id' => $task->getId()]);
+        }
+
         $sidebar = $this->generateControllerSidebar($task->getProject());
         $statuses = $entityManager->getRepository(Status::class)->findAll();
 
@@ -47,6 +64,7 @@ class TaskController extends AbstractController
             'task' => $task,
             'statuses' => $statuses,
             'sidebar' => $sidebar,
+            'commentForm' => $commentForm->createView(),
         ]);
     }
 
