@@ -22,7 +22,8 @@ class TaskController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private SidebarHelper $sidebarHelper,
-    ){}
+    ) {
+    }
 
     #[Route('/tasks', name: 'task_index', methods: ['GET', 'POST'])]
     public function index(): Response
@@ -40,8 +41,20 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}', name: 'task_view', methods: ['GET', 'POST'])]
-    public function view(Request $request, Task $task, EntityManagerInterface $entityManager): Response
+    public function view(Request $request, Task $task): Response
     {
+        // Handle task edit form
+        $taskForm = $this->createForm(TaskType::class, $task);
+        $taskForm->handleRequest($request);
+
+        if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Task updated successfully');
+            return $this->redirectToRoute('task_view', ['id' => $task->getId()]);
+        }
+
+        // Handle comment form
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
@@ -49,21 +62,21 @@ class TaskController extends AbstractController
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setTask($task);
             $comment->setAuthor($this->getUser());
-            $entityManager->persist($comment);
-            $entityManager->flush();
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'Comment added successfully');
-
             return $this->redirectToRoute('task_view', ['id' => $task->getId()]);
         }
 
         $sidebar = $this->generateControllerSidebar($task->getProject());
-        $statuses = $entityManager->getRepository(Status::class)->findAll();
+        $statuses = $this->entityManager->getRepository(Status::class)->findAll();
 
         return $this->render('tasks/view.html.twig', [
             'task' => $task,
             'statuses' => $statuses,
             'sidebar' => $sidebar,
+            'taskForm' => $taskForm->createView(),
             'commentForm' => $commentForm->createView(),
         ]);
     }
@@ -151,12 +164,13 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_index');
     }
 
-    private function generateControllerSidebar(Project $project) : array {
-      $nav_buttons = [
-        ['text' => 'Back to list', 'route' => 'project_list', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
-        ['text' => 'Back to board', 'route' => 'project_board', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
-      ];
+    private function generateControllerSidebar(Project $project): array
+    {
+        $nav_buttons = [
+            ['text' => 'Back to list', 'route' => 'project_list', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
+            ['text' => 'Back to board', 'route' => 'project_board', 'params' => ['id' => $project->getId()], 'icon' => 'ion:arrow-back-outline'],
+        ];
 
-      return $this->sidebarHelper->generateSidebar($project->getTitle(), $project->getSubtitle(), $nav_buttons);
+        return $this->sidebarHelper->generateSidebar($project->getTitle(), $project->getSubtitle(), $nav_buttons);
     }
 }

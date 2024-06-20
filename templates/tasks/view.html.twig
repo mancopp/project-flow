@@ -4,47 +4,75 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex">
-		<div class="flex-grow px-2 py-4 lg:px-6 lg:py-8">
-			<div class="flex flex-col lg:flex-row-reverse lg:justify-end lg:items-center lg:gap-4 lg:mb-8">
-				<div class="bg-pf-sky-blue p-4 rounded-lg flex justify-between items-center mb-6 lg:mb-0 lg:py-2 lg:px-6">
-					<h1 class="text-2xl font-bold lg:font-normal">TSK-{{task.id}}</h1>
-					<button class="lg:hidden">{{ ux_icon('fa-solid:bars', {class: 'w-8 h-8'}) }}</button>
+<div x-data="{ open: false }" class="flex">
+    <div class="flex-grow px-2 py-4 lg:px-6 lg:py-8">
+        <div class="flex flex-col lg:flex-row-reverse lg:justify-end lg:items-center lg:gap-4 lg:mb-8">
+            <div class="bg-pf-sky-blue p-4 rounded-lg flex justify-between items-center mb-6 lg:mb-0 lg:py-2 lg:px-6">
+                <h1 class="text-2xl font-bold lg:font-normal">PN-112</h1>
+                <button class="lg:hidden">{{ ux_icon('fa-solid:bars', {class: 'w-8 h-8'}) }}</button>
+            </div>
+            <h2 class="text-4xl font-bold mb-6 lg:mb-0">{{ task.name }}</h2>
+        </div>
+
+        <div class="mb-6 lg:mb-8">
+            <p class="text-xl mb-2">Status</p>
+            <div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg p-3 mt-2">
+                {% for status in statuses %}
+                    {% if status.id == task.status.id %}
+                        <span>{{ status.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-6 lg:mb-8">
+            <p class="text-xl mb-2">Description</p>
+            <div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg min-h-48 px-6 py-4">
+                <span>{{ task.description }}</span>
+            </div>
+        </div>
+
+        <!-- Button to trigger modal -->
+        <div class="mb-6 lg:mb-8">
+            <button @click="open = true" class="bg-blue-500 text-white rounded-lg p-3 w-full hover:bg-blue-600">Edit Task</button>
+        </div>
+
+        <!-- Modal for editing task -->
+        <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="fixed inset-0 bg-black opacity-50" @click="open = false"></div>
+            <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative z-50">
+                <h3 class="text-xl mb-4">Edit Task</h3>
+                {{ form_start(taskForm) }}
+				<div class="flex justify-between">
+					<button type="submit" class="bg-blue-500 text-white rounded-lg p-2 mt-2 w-32 hover:bg-blue-600">Update Task</button>
+					<button @click="open = false" class="bg-red-500 text-white rounded-lg p-2 w-32 mt-2 hover:bg-red-600">Close</button>
 				</div>
-				<h2 class="text-4xl font-bold mb-6 lg:mb-0">{{ task.name }}</h2>
-			</div>
-			<div class="mb-6 lg:mb-8">
-				<p class="text-xl mb-2">Status</p>
-				<form method="post" action="{{ path('task_update_status', {'id': task.id}) }}">
-					<select name="status" class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg p-3 mt-2">
-						{% for status in statuses %}
-							<option value="{{ status.id }}" {% if status.id == task.status.id %} selected {% endif %}>{{ status.name }}</option>
-						{% endfor %}
-					</select>
-					<button type="submit" class="bg-pf-sky-blue rounded-lg p-3 mt-2">Update Status</button>
-				</form>
-			</div>
-			<div class="mb-6 lg:mb-8">
-				<p class="text-xl mb-2">Description</p>
-				<div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg min-h-48 px-6 py-4">
-					<span>{{ task.description }}</span>
-				</div>
-			</div>
-			<div class="mb-6 lg:mb-8">
-				<p class="text-xl mb-2">Comments</p>
-				<div>
-					{% for comment in task.comments %}
-						<div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg px-6 py-4 mb-2">
-							<p>
-								<strong>{{ comment.author.username }}</strong>
-								({{ comment.createdAt|date('Y-m-d H:i') }})</p>
-							<p>{{ comment.content }}</p>
-						</div>
-					{% endfor %}
-				</div>
-				<div class="mt-4">
-					{{ form_start(commentForm) }}
-					{{ form_widget(commentForm.content, {
+                <div class="mb-4">
+                    {{ form_label(taskForm.name) }}
+                    {{ form_widget(taskForm.name, {'attr': {'class': 'bg-gray-100 border-2 border-gray-300 rounded-lg w-full p-2'}}) }}
+                </div>
+                <div class="mb-4">
+                    {{ form_label(taskForm.description) }}
+                    {{ form_widget(taskForm.description, {'attr': {'class': 'bg-gray-100 border-2 border-gray-300 rounded-lg w-full p-2'}}) }}
+                </div>
+                {{ form_end(taskForm) }}
+                
+            </div>
+        </div>
+
+        <div class="mb-6 lg:mb-8">
+            <p class="text-xl mb-2">Comments</p>
+            <div>
+                {% for comment in task.comments %}
+                    <div class="bg-pf-cyan-light border-pf-cyan border-2 rounded-lg px-6 py-4 mb-2">
+                        <p><strong>{{ comment.author.username }}</strong> ({{ comment.createdAt|date('Y-m-d H:i') }})</p>
+                        <p>{{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                {{ form_start(commentForm) }}
+                {{ form_widget(commentForm.content, {
                     'attr': {
                         'class': 'bg-gray-100 border-2 border-gray-300 rounded-lg w-full p-4 resize-none focus:outline-none focus:border-blue-500',
                         'placeholder': 'Write a comment...'
