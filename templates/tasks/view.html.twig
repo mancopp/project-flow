@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}View Task{% endblock %}
+{% block title %}View Task
+{% endblock %}
 
 {% block body %}
 <div x-data="{ open: false }" class="flex">
@@ -77,10 +78,10 @@
                         'placeholder': 'Write a comment...'
                     }
                 }) }}
-                <button class="bg-pf-sky-blue rounded-lg p-3 w-full">Comment</button>
-                {{ form_end(commentForm) }}
-            </div>
-        </div>
-    </div>
-</div>
+					<button class="bg-pf-sky-blue rounded-lg p-3 w-full">Comment</button>
+					{{ form_end(commentForm) }}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

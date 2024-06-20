@@ -20,7 +20,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         // Create roles
-        $roles = ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_MAINTAINER', 'ROLE_CLIENT'];
+        $roles = ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_MAINTAINER', 'ROLE_USER'];
 
         foreach ($roles as $roleName) {
             $role = new Role();

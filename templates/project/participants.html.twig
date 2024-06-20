@@ -4,12 +4,51 @@
 {% endblock %}
 
 {% block body %}
-  <div class="px-2 py-4 lg:px-6 lg:py-8">
-		<h1 class="text-4xl font-bold mb-8">Task List</h1>
-		<ul class="w-full flex-col">
+	<div class="px-2 py-4 lg:px-6 lg:py-8">
+		<h1 class="text-4xl font-bold mb-8">Participants</h1>
+
+		{% if canEditParticipants or canEditRoles %}
+			<form method="post" action="{{ path('add_participant', {'projectId': project.id}) }}" class="mb-4">
+				<input type="email" name="email" placeholder="Enter participant email" required class="bg-gray-200 text-black font-bold py-2 px-4 rounded mr-2">
+				<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					Add Participant
+				</button>
+			</form>
+		{% endif %}
+
+		<ul class="w-full flex-col space-y-4">
 			{% for user in users %}
-				<li>
-					<div class="block rounded-xl w-full mb-2 p-5 font-bold text-xl text-white bg-cyan-700 hover:bg-cyan-800">{{ user.username }} {{ user.email }} {{ user.role }}</div>
+				<li class="flex justify-between items-center p-5 rounded-xl bg-cyan-700 hover:bg-cyan-800 text-white font-bold text-xl">
+					<span>
+						{{ user.username == app.user.username ? 'You: ' : ''}}
+						{{ user.username }}
+						({{ user.title }})
+					</span>
+					{% if user.email != app.user.email %}
+						<div class="flex space-x-2">
+							{% if canEditRoles %}
+								<form method="post" action="{{ path('change_role', {'projectId': project.id, 'userId': user.id}) }}">
+									<select name="newRole" class="bg-gray-200 text-black font-bold py-2 px-4 rounded">
+										{% for role in availableRoles %}
+											<option value="{{ role }}" {{ role == user.role ? 'selected' : '' }}>
+												{{ role }}
+											</option>
+										{% endfor %}
+									</select>
+									<button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+										Change Role
+									</button>
+								</form>
+							{% endif %}
+							{% if canEditParticipants and user.role != 'ROLE_ADMIN' %}
+								<form method="post" action="{{ path('remove_participant', {'projectId': project.id, 'userId': user.id}) }}">
+									<button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+										Remove
+									</button>
+								</form>
+							{% endif %}
+						</div>
+					{% endif %}
 				</li>
 			{% endfor %}
 		</ul>

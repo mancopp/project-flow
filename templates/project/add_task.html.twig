@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Add task
+{% block title %}Add Task
 {% endblock %}
 
 {% block body %}
-
-	<div class="px-2 py-4 lg:px-6 lg:py-8">
+	<div class="container mx-auto px-4 py-8">
 		<h1 class="text-4xl font-bold mb-8">Add Task</h1>
 
-		{{ form_start(form) }}
-		{{ form_row(form.name) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.status) }}
+		{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
-		<button class="btn btn-primary">Save</button>
+		<div class="space-y-2">
+			<label for="{{ form.name.vars.id }}" class="block text-lg font-medium text-gray-700">
+				{{ form.name.vars.label|trans }}
+			</label>
+			{{ form_widget(form.name, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+			{{ form_errors(form.name) }}
+		</div>
+
+		<div class="space-y-2">
+			<label for="{{ form.description.vars.id }}" class="block text-lg font-medium text-gray-700">
+				{{ form.description.vars.label|trans }}
+			</label>
+			{{ form_widget(form.description, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+			{{ form_errors(form.description) }}
+		</div>
+
+		<div class="space-y-2">
+			<label for="{{ form.status.vars.id }}" class="block text-lg font-medium text-gray-700">
+				{{ form.status.vars.label|trans }}
+			</label>
+			{{ form_widget(form.status, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+			{{ form_errors(form.status) }}
+		</div>
+
+		<button class="mt-6 w-full inline-flex justify-center py-4 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-700 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+			Save
+		</button>
+
 		{{ form_end(form) }}
-
 	</div>
 {% endblock %}
